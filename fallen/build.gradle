@@ -1,16 +1,17 @@
 apply plugin: 'com.android.library'
 apply plugin: 'kotlin-android'
 apply plugin: 'kotlin-android-extensions'
-android {
-    compileSdkVersion 28
+apply plugin: 'kotlin-kapt'
 
+android {
+    compileSdkVersion buildVersions.compileSdkVersion
+    buildToolsVersion buildVersions.buildToolsVersion
 
     defaultConfig {
-        minSdkVersion 23
-        targetSdkVersion 28
+        minSdkVersion buildVersions.minSdkVersion
+        targetSdkVersion buildVersions.targetSdkVersion
         versionCode 1
         versionName "1.0"
-
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
         consumerProguardFiles 'consumer-rules.pro'
     }
@@ -22,14 +23,37 @@ android {
         }
     }
 
+    /*Use java version 1.8 in this module*/
+    compileOptions {
+        sourceCompatibility buildVersions.javaVersion
+        targetCompatibility buildVersions.javaVersion
+    }
 }
 
 dependencies {
-    implementation fileTree(dir: 'libs', include: ['*.jar'])
-    implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
-    implementation 'androidx.appcompat:appcompat:1.1.0'
-    implementation 'androidx.core:core-ktx:1.1.0'
-    testImplementation 'junit:junit:4.12'
-    androidTestImplementation 'androidx.test:runner:1.2.0'
-    androidTestImplementation 'androidx.test.espresso:espresso-core:3.2.0'
+    //Kotlin
+    implementation deps.kotlin.runtime
+    implementation deps.kotlin.androidCore
+
+    //Kotlin CoRoutines
+    implementation deps.coroutines.runtime
+    implementation deps.coroutines.core
+
+    /*Room - Library used to map objects with SQLite database for db operations
+      url {@link "https://developer.android.com/topic/libraries/architecture/room"}*/
+    implementation deps.room.runtime
+    kapt deps.room.androidAnnotationProcessor
+
+    // optional - Kotlin Extensions and Coroutines support for Room
+    implementation deps.room.kotlinCoroutinesSupport
+
+    // Testing dependencies
+    androidTestImplementation deps.testing.espresso
+    androidTestImplementation deps.testing.espressoCore
+    androidTestImplementation deps.testing.espressoIntents
+    androidTestImplementation deps.testing.jUnitExt
+    testImplementation deps.testing.jUnit
+    testImplementation deps.testing.room
+    testImplementation deps.testing.mokito
+    androidTestImplementation deps.testing.androidMokito
 }

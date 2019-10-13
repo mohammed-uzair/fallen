@@ -1,0 +1,36 @@
+{
+  "data": [
+    {
+      "menuImage": "@drawable/ic_review",
+      "menuName": "@string/nav_menu_customer_review_visits"
+    },
+    {
+      "menuImage": "@drawable/ic_shop_stock",
+      "menuName": "@string/nav_menu_customer_shop_stock"
+    },
+    {
+      "menuImage": "@drawable/ic_customer_order",
+      "menuName": "@string/nav_menu_customer_orders"
+    },
+    {
+      "menuImage": "@drawable/ic_invoice",
+      "menuName": "@string/nav_menu_customer_invoice"
+    },
+    {
+      "menuImage": "@drawable/ic_collection",
+      "menuName": "@string/nav_menu_customer_ar_collection"
+    },
+    {
+      "menuImage": "@drawable/ic_information",
+      "menuName": "@string/nav_menu_customer_information"
+    },
+    {
+      "menuImage": "@drawable/ic_customer_merchandise",
+      "menuName": "@string/nav_menu_customer_asset_scanning"
+    },
+    {
+      "menuImage": "@drawable/ic_customer_continue",
+      "menuName": "@string/continue_next"
+    }
+  ]
+}

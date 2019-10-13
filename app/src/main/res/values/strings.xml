@@ -1,5 +1,6 @@
 <resources>
     <string name="app_name">I Am Falling</string>
+    <string name="event_image_description">Event Image</string>
 
     <string-array name="fall_detected_messages">
         <item>Was that an earth quake or did you just fell ?</item>
