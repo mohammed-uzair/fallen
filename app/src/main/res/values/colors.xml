@@ -1,6 +1,23 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="colorPrimary">#008577</color>
-    <color name="colorPrimaryDark">#00574B</color>
-    <color name="colorAccent">#D81B60</color>
+    <!--Root theme Colors-->
+    <color name="colorPrimary">#3F51B5</color>
+    <color name="colorPrimaryDark">#303F9F</color>
+    <color name="colorAccent">#59AB61</color>
+    <color name="colorAccentDisabled">#8059AB61</color>
+
+    <!--Other app colors-->
+    <color name="app_main_bg">#FAFAFA</color>
+    <color name="red">#f44336</color>
+    <color name="red_disabled">#ff9999</color>
+    <color name="vector_icon_black">#FF000000</color>
+    <color name="black_color">#FF000000</color>
+    <color name="dark_yellow">#CCCC00</color>
+    <color name="black_overlay">#66000000</color>
+    <color name="colorTextDisable">#66FFFFFF</color>
+    <color name="grid_header">#bcbcbc</color>
+    <color name="light_grey">#D3D3D3</color>
+
+    <!--Card View Background-->
+    <color name="card_view_background">#E8EAED</color>
 </resources>

@@ -14,6 +14,7 @@ import android.util.Log
 import android.widget.Toast
 import androidx.core.app.NotificationCompat
 import com.example.uzair.iamfalling.AppHandler.Companion.NOTIFICATION_CHANNEL_ID
+import com.example.uzair.iamfalling.view.HomeActivity
 import kotlin.math.pow
 import kotlin.math.sqrt
 
@@ -65,7 +66,7 @@ class FallDetectionService : IntentService("FallDetectionService"), SensorEventL
     override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
         val input = intent?.getStringExtra("inputExtra")
 
-        val myApp = Intent(this, MainActivity::class.java)
+        val myApp = Intent(this, HomeActivity::class.java)
         val pendingIntent = PendingIntent.getActivity(
             this,
             101, myApp, 0
