@@ -1,0 +1,30 @@
+<resources>
+    <string name="app_name">I Am Falling</string>
+
+    <string-array name="fall_detected_messages">
+        <item>Was that an earth quake or did you just fell ?</item>
+        <item>Our Sensors are gossiping that you fell.</item>
+        <item>We noticed you fell! are you all right ?</item>
+        <item>Please watch your step, we noticed you fell.</item>
+        <item>Are you hurt? We observed you fell.</item>
+    </string-array>
+
+    <string-array name="frequent_fall_messages">
+        <item>Is falling too often a sport?</item>
+        <item>Are you a panda? cause we noticed you are falling like one.</item>
+        <item>Are you testing me? Cause I have been tested a million times already.</item>
+        <item>You seem to be a kid. Please hand over the phone to your mom.</item>
+        <item>Ouch, that hurts.</item>
+        <item>Seems like you are angry.</item>
+    </string-array>
+
+    <string-array name="shake_messages">
+        <item>We care for you, please don\'t test our limits. Cause that goes to infinity.</item>
+        <item>That was a really thick milk shake.</item>
+        <item>Guess you want to test us.</item>
+        <item>I wont power up until you actually fall.</item>
+        <item>I am here to help you, not to play with you.</item>
+        <item>Guess you need some private time.</item>
+        <item>I wont tell your mom what you just did.</item>
+    </string-array>
+</resources>
