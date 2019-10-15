@@ -39,6 +39,9 @@ dependencies {
     implementation deps.coroutines.runtime
     implementation deps.coroutines.core
 
+    //Pagination
+    implementation deps.pagination
+
     /*Room - Library used to map objects with SQLite database for db operations
       url {@link "https://developer.android.com/topic/libraries/architecture/room"}*/
     implementation deps.room.runtime

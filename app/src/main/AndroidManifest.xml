@@ -2,9 +2,6 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.example.uzair.iamfalling">
 
-    <uses-permission android:name="android.permission.FOREGROUND_SERVICE" />
-    <uses-permission android:name="android.permission.WAKE_LOCK" />
-
     <application
         android:name=".AppHandler"
         android:allowBackup="true"
@@ -23,7 +20,7 @@
 
         <activity android:name=".view.HomeActivity" />
 
-        <service android:name=".FallDetectionService" />
+        <service android:name="com.example.uzair.fallen.events_service.FallDetectionService" />
 
     </application>
 

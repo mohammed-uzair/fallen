@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/item_menu"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:gravity="center"
+    android:elevation="5dp"
+    android:background="@drawable/alm_card"
+    android:layout_marginBottom="2dp"
+    android:layout_marginEnd="2dp"
+    android:padding="5dp"
+    tools:cardUseCompatPadding="true"
+    tools:hardwareAccelerated="true"
+    tools:ignore="UseCompoundDrawables">
+
+    <ImageView
+        android:id="@+id/grid_menu_items_for_recycler_view_menu_image"
+        android:layout_width="194dp"
+        android:layout_height="194dp"
+        android:layout_gravity="center_horizontal"
+        android:contentDescription="@string/app_name"
+        tools:src="@sample/menu_item_event.json/data/eventImage" />
+
+    <TextView
+        android:id="@+id/grid_menu_items_for_recycler_view_menu_text"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        tools:text="@sample/menu_item_event.json/data/eventName" />
+
+</LinearLayout>

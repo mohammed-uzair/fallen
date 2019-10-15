@@ -2,8 +2,15 @@
     <string name="app_name">I Am Falling</string>
     <string name="event_image_description">Event Image</string>
 
+    <!--region Screen Titles-->
+    <string name="home_screen_title">Home Menu</string>
+    <string name="device_event_screen_title">Device Events</string>
+    <!--endregion-->
+
+    <!--region Launch screen labels-->
     <string name="launch_text_main">I am falling</string>
     <string name="launch_text_sub">A smart fall detection app</string>
+    <!--endregion-->
 
     <!--region Home menu names-->
     <string name="home_menu_detect_only_falls">Only Falls</string>

@@ -1,3 +1,21 @@
 <resources>
     <string name="app_name">Fallen</string>
+
+    <!--region Notification category names-->
+    <string name="notification_channel_sensor_listener_name">Sensor listener category</string>
+    <string name="notification_channel_fall_detection_name">Fall detection category</string>
+    <string name="notification_channel_other_detection_name">Shake detection category</string>
+    <!--endregion-->
+
+    <!--region Notification category descriptions-->
+    <string name="notification_channel_sensor_listener_description">This is a foreground notification category, to show user what is happening in the app.</string>
+    <string name="notification_channel_fall_detection_description">This category show any critical notifications, like falling.</string>
+    <string name="notification_channel_other_detection_description">This category show any other information like device shakes etc.</string>
+    <string name="serviceDescription">I am your life saver, please let me run silently</string>
+    <!--endregion-->
+
+    <!--region Fall detection message-->
+    <string name="notification_fall_name">Fall</string>
+    <string name="notification_fall_detected_message">Fall detected</string>
+    <!--endregion-->
 </resources>
