@@ -13,8 +13,9 @@ import com.example.uzair.fallen.util.IntentExtras
 class Fallen(private val application: Application) {
     companion object {
         private val TAG = this::class.java.simpleName
-        public val DETECT_FALL = true
-        public val DETECT_SHAKES = false
+        public var DETECT_FALL = true
+        public var DETECT_FREQUENT_FALLS = true
+        public var DETECT_SHAKES = true
 
         //Foreground static notification
         const val NOTIFICATION_CHANNEL_SENSOR_LISTENER = "NOTIFICATION_CHANNEL_SENSOR_LISTENER"
@@ -64,7 +65,10 @@ class Fallen(private val application: Application) {
         }
     }
 
-    fun startEventDetectionService(
+    fun startFallen(
+        detectFalls: Boolean = true,
+        detectShakes: Boolean = true,
+        detectFrequentFalls: Boolean = true,
         serviceName: String = application.resources.getString(R.string.app_name),
         serviceDescription: String = application.resources.getString(R.string.serviceDescription)
     ) {
@@ -72,7 +76,16 @@ class Fallen(private val application: Application) {
         intent.putExtra(IntentExtras.SERVICE_NAME.name, serviceName)
         intent.putExtra(IntentExtras.SERVICE_DESCRIPTION.name, serviceDescription)
 
+        DETECT_FALL = detectFalls
+        DETECT_FREQUENT_FALLS = detectFrequentFalls
+        DETECT_SHAKES = detectShakes
+
         ContextCompat.startForegroundService(application, intent)
+    }
+
+    fun stopFallen() {
+        val intent = Intent(application, FallDetectionService::class.java)
+        application.stopService(intent)
     }
 
     fun setFallDetectionMessages(fallDetectionMessages: Array<String>) {

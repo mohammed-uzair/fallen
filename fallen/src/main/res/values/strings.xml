@@ -16,6 +16,10 @@
 
     <!--region Fall detection message-->
     <string name="notification_fall_name">Fall</string>
+    <string name="notification_shaken_name">Shaken</string>
+    <string name="notification_frequent_fall_name">Frequent Fall</string>
     <string name="notification_fall_detected_message">Fall detected</string>
+    <string name="notification_frequent_fall_detected_message">Frequent Fall detected</string>
+    <string name="notification_shake_detected_message">Shake detected</string>
     <!--endregion-->
 </resources>

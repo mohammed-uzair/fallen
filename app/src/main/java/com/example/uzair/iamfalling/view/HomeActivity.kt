@@ -1,13 +1,14 @@
 package com.example.uzair.iamfalling.view
 
-import android.content.Intent
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
-import com.example.uzair.fallen.events_service.FallDetectionService
+import com.example.uzair.fallen.Fallen
 import com.example.uzair.iamfalling.AppHandler
 import com.example.uzair.iamfalling.R
 
 class HomeActivity : AppCompatActivity() {
+    private lateinit var fallen: Fallen
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_home)
@@ -16,7 +17,7 @@ class HomeActivity : AppCompatActivity() {
     }
 
     override fun onDestroy() {
-        stopService()
+        stopFallen()
 
         super.onDestroy()
     }
@@ -29,22 +30,25 @@ class HomeActivity : AppCompatActivity() {
             .addToBackStack("HomeMenuFragment")
             .commit()
 
-        startService()
+        fallen = (application as AppHandler).fallen
+
+        startFallen()
     }
 
-    private fun startService() {
-        val application = application as AppHandler
-
+    public fun startFallen(
+        detectFalls: Boolean = true,
+        detectShakes: Boolean = true,
+        detectFrequentFalls: Boolean = true
+    ) {
         //Give the fallen library all the notification messages
-        application.fallen.setFallDetectionMessages(resources.getStringArray(R.array.fall_detected_messages))
-        application.fallen.setFrequentFallDetectionMessages(resources.getStringArray(R.array.frequent_fall_messages))
-        application.fallen.setShakeDetectionMessages(resources.getStringArray(R.array.shake_messages))
+        fallen.setFallDetectionMessages(resources.getStringArray(R.array.fall_detected_messages))
+        fallen.setFrequentFallDetectionMessages(resources.getStringArray(R.array.frequent_fall_messages))
+        fallen.setShakeDetectionMessages(resources.getStringArray(R.array.shake_messages))
 
-        application.fallen.startEventDetectionService()
+        fallen.startFallen(detectFalls = detectFalls, detectShakes = detectShakes)
     }
 
-    private fun stopService() {
-        val intent = Intent(this, FallDetectionService::class.java)
-        stopService(intent)
+    public fun stopFallen() {
+        fallen.stopFallen()
     }
 }

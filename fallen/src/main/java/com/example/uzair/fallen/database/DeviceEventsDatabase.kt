@@ -5,16 +5,16 @@ import androidx.room.Database
 import androidx.room.Room
 import androidx.room.RoomDatabase
 import com.example.uzair.fallen.database.dao.DeviceEventsDao
-import com.example.uzair.fallen.database.model.DeviceEvents
+import com.example.uzair.fallen.database.model.DeviceEvent
 
 /**
  * Singleton database object. Note that for a real app, you should probably use a Dependency
  * Injection framework or Service Locator to create the singleton database.
  */
-private const val DATABASE_NAME = "DeviceEvents.db"
+private const val DATABASE_NAME = "DeviceEvent.db"
 
 @Database(
-    entities = [DeviceEvents::class],
+    entities = [DeviceEvent::class],
     version = 1
 )
 abstract class DeviceEventsDatabase : RoomDatabase() {

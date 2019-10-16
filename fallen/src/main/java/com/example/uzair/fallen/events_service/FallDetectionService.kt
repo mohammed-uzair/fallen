@@ -10,13 +10,17 @@ import android.hardware.SensorManager
 import android.os.Build
 import android.os.PowerManager
 import android.util.Log
-import android.widget.Toast
 import androidx.core.app.NotificationCompat
 import androidx.core.app.NotificationManagerCompat
+import com.example.uzair.fallen.Fallen
+import com.example.uzair.fallen.Fallen.Companion.DETECT_FALL
+import com.example.uzair.fallen.Fallen.Companion.DETECT_FREQUENT_FALLS
 import com.example.uzair.fallen.Fallen.Companion.DETECT_SHAKES
-import com.example.uzair.fallen.Fallen.Companion.NOTIFICATION_CHANNEL_FALL
 import com.example.uzair.fallen.Fallen.Companion.NOTIFICATION_CHANNEL_SENSOR_LISTENER
 import com.example.uzair.fallen.R
+import com.example.uzair.fallen.database.model.DeviceEvent
+import com.example.uzair.fallen.repository.DeviceEventsRepository
+import com.example.uzair.fallen.repository.IDeviceEventsRepository
 import com.example.uzair.fallen.util.IntentExtras
 import kotlin.math.pow
 import kotlin.math.sqrt
@@ -25,13 +29,17 @@ class FallDetectionService : IntentService("FallDetectionService"), SensorEventL
     private lateinit var wakeLock: PowerManager.WakeLock
     private lateinit var sensorManager: SensorManager
 
-    private var deviceLastShakenTime: Long = 0
+    private lateinit var deviceEventRepository: IDeviceEventsRepository
 
-    //test 3 https://stackoverflow.com/a/2318356/11928533
+    private var deviceFallStartTime: Long = 0
+    private var deviceFallEndTime: Long = 0
+    private var previousDeviceFellTime: Long = 0
+    private var deviceLastShakenTime: Long = 0
     private var finalSensorAcceleration = 0F
     private var currentSensorAcceleration = SensorManager.GRAVITY_EARTH
     private var previousSensorAcceleration = SensorManager.GRAVITY_EARTH
     private var currentDeviceTime = 0L
+    private var frequentFallTimeOut = 1000 // 1 second
 
     companion object {
         private const val TAG = "FallDetectionService"
@@ -55,6 +63,8 @@ class FallDetectionService : IntentService("FallDetectionService"), SensorEventL
 
     override fun onCreate() {
         Log.d(TAG, "Free Fall Service Started")
+
+        deviceEventRepository = DeviceEventsRepository(application)
 
         val powerManager: PowerManager = getSystemService(Context.POWER_SERVICE) as PowerManager
         wakeLock = powerManager.newWakeLock(
@@ -128,24 +138,27 @@ class FallDetectionService : IntentService("FallDetectionService"), SensorEventL
             Log.d(TAG, "Sensor Computed Value : $rootSquare")
 
             //Fall detection
-            if (rootSquare < 2.0) {
-                Toast.makeText(this, "Fall detected Value : $rootSquare", Toast.LENGTH_SHORT).show()
-                Log.d(TAG, "Fall sensor Value : $rootSquare")
+            if (DETECT_FALL) {
+                if (rootSquare < 2.0) {
+                    if (deviceFallStartTime == 0L) {
+                        deviceFallStartTime = System.currentTimeMillis()
+                    }
+                } else if (deviceFallStartTime > 0) {
+                    deviceFallEndTime = System.currentTimeMillis()
 
-                //Show a notification
-                var message = DetectionMessages.getFallDetectionMessage()
-                if (message == null) {
-                    message = application.getString(R.string.notification_fall_detected_message)
+                    val fallDuration: Double =
+                        (deviceFallEndTime - deviceFallStartTime) / 1000.00
+
+                    deviceFallDetected()
+
+                    //Save device event
+                    val deviceEvent = DeviceEvent(0, "Fall", "That was a fall", fallDuration)
+                    saveToDataSource(deviceEvent)
+
+                    previousDeviceFellTime = deviceFallEndTime
+                    deviceFallEndTime = 0L
+                    deviceFallStartTime = 0L
                 }
-                val notification = NotificationCompat.Builder(this, NOTIFICATION_CHANNEL_FALL)
-                    .setSmallIcon(R.drawable.ic_service)
-                    .setContentTitle(application.getString(R.string.notification_fall_name))
-                    .setContentText(message)
-                    .setPriority(NotificationCompat.PRIORITY_HIGH)
-                    .setCategory(NotificationCompat.CATEGORY_MESSAGE)
-                    .build()
-
-                NotificationManagerCompat.from(this).notify(FALL_DETECTION_NOTIFICATION_ID, notification)
             }
 
             //Shake detection
@@ -169,16 +182,11 @@ class FallDetectionService : IntentService("FallDetectionService"), SensorEventL
                     if (finalSensorAcceleration > DEVICE_SHAKE_ACCELERATION_SPEED) {
                         deviceLastShakenTime = currentDeviceTime
 
-                        Toast.makeText(
-                            applicationContext,
-                            "Device has shaken with acceleration = $finalSensorAcceleration",
-                            Toast.LENGTH_SHORT
-                        ).show()
+                        showShakeNotification()
 
-                        Log.d(
-                            "Shaken",
-                            "Device has shaken with acceleration = $finalSensorAcceleration"
-                        )
+                        //Save device event
+                        val deviceEvent = DeviceEvent(0, "Shaken", "You made a good shake", 0.0)
+                        saveToDataSource(deviceEvent)
                     }
                 }
             }
@@ -189,7 +197,97 @@ class FallDetectionService : IntentService("FallDetectionService"), SensorEventL
 
     }
 
+    private fun deviceFallDetected() {
+        if (DETECT_FREQUENT_FALLS && isAFrequentFall()) {
+            showFrequentFallNotification()
+        } else {
+            showFallNotification()
+        }
+    }
+
+    private fun isAFrequentFall() =
+        (System.currentTimeMillis() - previousDeviceFellTime) < frequentFallTimeOut
+
+    private fun showFallNotification() {
+        //Notify user
+        Log.d(TAG, "Fall detected")
+
+        //Show a notification
+        var message = DetectionMessages.getFallDetectionMessage()
+        if (message == null) {
+            message = application.getString(R.string.notification_fall_detected_message)
+        }
+        val notification = NotificationCompat.Builder(
+            this,
+            Fallen.NOTIFICATION_CHANNEL_FALL
+        )
+            .setSmallIcon(R.drawable.ic_service)
+            .setContentTitle(application.getString(R.string.notification_fall_name))
+            .setContentText(message)
+            .setPriority(NotificationCompat.PRIORITY_HIGH)
+            .setCategory(NotificationCompat.CATEGORY_MESSAGE)
+            .build()
+
+        NotificationManagerCompat.from(this)
+            .notify(FALL_DETECTION_NOTIFICATION_ID, notification)
+    }
+
+    private fun showFrequentFallNotification() {
+        //Notify user
+        Log.d(TAG, "Frequent fall detected")
+
+        //Show a notification
+        var message = DetectionMessages.getFrequentFallDetectionMessage()
+        if (message == null) {
+            message = application.getString(R.string.notification_frequent_fall_detected_message)
+        }
+        val notification = NotificationCompat.Builder(
+            this,
+            Fallen.NOTIFICATION_CHANNEL_OTHER
+        )
+            .setSmallIcon(R.drawable.ic_service)
+            .setContentTitle(application.getString(R.string.notification_frequent_fall_name))
+            .setContentText(message)
+            .setPriority(NotificationCompat.PRIORITY_LOW)
+            .setCategory(NotificationCompat.CATEGORY_MESSAGE)
+            .build()
+
+        NotificationManagerCompat.from(this)
+            .notify(OTHER_DETECTION_NOTIFICATION_ID, notification)
+    }
+
+    private fun showShakeNotification() {
+        //Notify user
+        Log.d(TAG, "Shake detected")
+
+        //Show a notification
+        var message = DetectionMessages.getShakeDetectionMessage()
+        if (message == null) {
+            message = application.getString(R.string.notification_shake_detected_message)
+        }
+        val notification = NotificationCompat.Builder(
+            this,
+            Fallen.NOTIFICATION_CHANNEL_FALL
+        )
+            .setSmallIcon(R.drawable.ic_service)
+            .setContentTitle(application.getString(R.string.notification_shaken_name))
+            .setContentText(message)
+            .setPriority(NotificationCompat.PRIORITY_LOW)
+            .setCategory(NotificationCompat.CATEGORY_MESSAGE)
+            .build()
+
+        NotificationManagerCompat.from(this)
+            .notify(OTHER_DETECTION_NOTIFICATION_ID, notification)
+    }
+
     private fun isSensorsTimeDifferencesGreaterThanThreshold() =
         currentDeviceTime - deviceLastShakenTime > ACCELEROMETER_SENSOR_DELAY
+
+    /**
+     * Save the data to the data source
+     */
+    private fun saveToDataSource(deviceEvent: DeviceEvent) {
+        deviceEventRepository.saveDeviceEvent(deviceEvent)
+    }
     //endregion
 }

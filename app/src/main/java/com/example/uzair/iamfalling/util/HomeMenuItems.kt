@@ -25,14 +25,14 @@ class HomeMenuItems {
         homeMenuItems.put(
             HomeMenuType.FALLS_AND_SHAKES.value(),
             GridMenuItemsModel(
-                HomeMenuType.FALLS_AND_SHAKES.value(), R.drawable.ic_service,
+                HomeMenuType.FALLS_AND_SHAKES.value(), R.drawable.ic_fall2,
                 R.string.home_menu_detect_falls_and_shakes
             )
         )
         homeMenuItems.put(
             HomeMenuType.ALL.value(),
             GridMenuItemsModel(
-                HomeMenuType.ALL.value(), R.drawable.ic_service,
+                HomeMenuType.ALL.value(), R.drawable.ic_shake2,
                 R.string.home_menu_detect_falls_frequent_falls_and_shakes
             )
         )

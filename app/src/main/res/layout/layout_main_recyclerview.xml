@@ -10,5 +10,5 @@
     android:requiresFadingEdge="horizontal|vertical"
     app:layoutManager="androidx.recyclerview.widget.GridLayoutManager"
     tools:itemCount="8"
-    tools:listitem="@layout/item_event"
-    tools:spanCount="2" />
+    tools:listitem="@layout/item_device_event"
+    />

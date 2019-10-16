@@ -1,20 +1,30 @@
 package com.example.uzair.iamfalling.adapter
 
 
+import android.util.Log
 import android.util.SparseArray
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
-import android.widget.LinearLayout
 import android.widget.TextView
+import androidx.annotation.StringRes
+import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.fragment.app.FragmentActivity
 import androidx.recyclerview.widget.RecyclerView
 import com.example.uzair.iamfalling.R
 import com.example.uzair.iamfalling.util.GridMenuItemsModel
+import com.example.uzair.iamfalling.util.HomeMenuType
+import com.example.uzair.iamfalling.view.DeviceEventsFragment
+import com.example.uzair.iamfalling.view.HomeActivity
 import com.example.uzair.iamfalling.view.HomeMenuFragment
+import com.google.android.material.snackbar.Snackbar
 
 class HomeMenuAdapter : RecyclerView.Adapter<HomeMenuAdapter.MyViewHolder>() {
+    companion object {
+        private val TAG = this::class.java.simpleName
+    }
+
     private var namesArrList: SparseArray<GridMenuItemsModel>? = null
     private var activity: FragmentActivity? = null
     private var fragment: HomeMenuFragment? = null
@@ -52,22 +62,56 @@ class HomeMenuAdapter : RecyclerView.Adapter<HomeMenuAdapter.MyViewHolder>() {
             view.findViewById(R.id.grid_menu_items_for_recycler_view_menu_text)
         internal var menuItemImage: ImageView =
             view.findViewById(R.id.grid_menu_items_for_recycler_view_menu_image)
-        private var linearLayout: LinearLayout = view.findViewById(R.id.item_menu)
+        private var rootLayout: ConstraintLayout = view.findViewById(R.id.item_menu)
 
-        init {
-            linearLayout.setOnClickListener { v ->
-                //Give the focus
-                //Enable all the hurdle parameters
-                view.isFocusable = true
-                view.isFocusableInTouchMode = true
 
-                //Request the focus now
-                if (view.requestFocus()) {
-                    //Once the focus is gained
-                    //Revoke the focusable in touch mode to false, to avoid any un foreseen results on UI
-                    view.isFocusableInTouchMode = false
+        val listener = rootLayout.setOnClickListener {
+            val homeActivity = activity as HomeActivity
+            val menu = namesArrList?.get(adapterPosition)
+
+            when (menu?.menuId) {
+                HomeMenuType.ONLY_FALLS.value() -> {
+                    homeActivity.startFallen(detectShakes = false)
+                    showSnackbar(rootLayout, R.string.start_fall_service)
+                }
+                HomeMenuType.ONLY_SHAKES.value() -> {
+                    homeActivity.startFallen(detectFalls = false)
+                    showSnackbar(rootLayout, R.string.start_shake_service)
+                }
+                HomeMenuType.FALLS_AND_SHAKES.value() -> {
+                    homeActivity.startFallen()
+                    showSnackbar(rootLayout, R.string.start_fall_and_shake_service)
+                }
+                HomeMenuType.ALL.value() -> {
+                    homeActivity.startFallen()
+                    showSnackbar(rootLayout, R.string.start_fall_and_shake_service)
+                }
+                HomeMenuType.ALL_EVENTS.value() -> {
+                    //Move to home menu fragment
+                    activity?.let {
+                        activity?.supportFragmentManager
+                            ?.beginTransaction()
+                            ?.replace(
+                                R.id.root_home_activity,
+                                DeviceEventsFragment(),
+                                "HomeMenuFragment"
+                            )
+                            ?.addToBackStack("HomeMenuFragment")
+                            ?.commit()
+                    }
+                }
+                HomeMenuType.STOP_SERVICE.value() -> {
+                    homeActivity.stopFallen()
+                    showSnackbar(rootLayout, R.string.service_stopped)
+                }
+                else -> {
+                    Log.d(TAG, "No menu item satisfied")
                 }
             }
         }
+    }
+
+    private fun showSnackbar(rootLayout: View, @StringRes messageResource: Int) {
+        Snackbar.make(rootLayout, messageResource, Snackbar.LENGTH_LONG).show()
     }
 }

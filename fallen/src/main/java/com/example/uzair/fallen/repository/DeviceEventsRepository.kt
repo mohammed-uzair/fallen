@@ -4,7 +4,7 @@ import android.app.Application
 import androidx.lifecycle.LiveData
 import androidx.paging.PagedList
 import com.example.uzair.fallen.database.implementation.DeviceEventsDaoImplementation
-import com.example.uzair.fallen.database.model.DeviceEvents
+import com.example.uzair.fallen.database.model.DeviceEvent
 
 /**
  * This class is the intermediate between the data sources and the data requesting logic.
@@ -23,19 +23,24 @@ import com.example.uzair.fallen.database.model.DeviceEvents
 class DeviceEventsRepository(private val context: Application) : IDeviceEventsRepository {
     private lateinit var deviceEventsDataSource: IDeviceEventsRepository
 
-    override fun getAllDeviceEvents(): LiveData<PagedList<DeviceEvents>> {
+    override fun getAllDeviceEvents(): LiveData<PagedList<DeviceEvent>> {
         setDataSource()
         return deviceEventsDataSource.getAllDeviceEvents()
     }
 
-    override fun getAllShakeDeviceEvents(): LiveData<PagedList<DeviceEvents>> {
+    override fun getAllShakeDeviceEvents(): LiveData<PagedList<DeviceEvent>> {
         setDataSource()
         return deviceEventsDataSource.getAllShakeDeviceEvents()
     }
 
-    override fun getAllFallDeviceEvents(): LiveData<PagedList<DeviceEvents>> {
+    override fun getAllFallDeviceEvents(): LiveData<PagedList<DeviceEvent>> {
         setDataSource()
         return deviceEventsDataSource.getAllFallDeviceEvents()
+    }
+
+    override fun saveDeviceEvent(deviceEvent: DeviceEvent) {
+        setDataSource()
+        deviceEventsDataSource.saveDeviceEvent(deviceEvent)
     }
 
     private fun setDataSource() {

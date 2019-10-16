@@ -17,7 +17,7 @@
         android:padding="5dp">
 
         <ImageView
-            android:id="@+id/imageView"
+            android:id="@+id/eventImage"
             android:layout_width="50dp"
             android:layout_height="50dp"
             android:contentDescription="@string/event_image_description"
@@ -34,7 +34,7 @@
             android:textColor="?colorPrimary"
             android:textSize="25sp"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toEndOf="@+id/imageView"
+            app:layout_constraintStart_toEndOf="@id/eventImage"
             app:layout_constraintTop_toTopOf="parent"
             tools:text="@sample/menu_item_event.json/data/eventName" />
 
@@ -44,8 +44,8 @@
             android:layout_height="wrap_content"
             android:layout_marginStart="20dp"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toEndOf="@+id/imageView"
-            app:layout_constraintTop_toBottomOf="@+id/item_event_name"
+            app:layout_constraintStart_toEndOf="@id/eventImage"
+            app:layout_constraintTop_toBottomOf="@id/item_event_name"
             tools:text="@sample/menu_item_event.json/data/eventComment" />
 
         <TextView
@@ -57,8 +57,8 @@
             android:textColor="?colorAccent"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toEndOf="@+id/imageView"
-            app:layout_constraintTop_toBottomOf="@+id/item_event_comment"
+            app:layout_constraintStart_toEndOf="@id/eventImage"
+            app:layout_constraintTop_toBottomOf="@id/item_event_comment"
             tools:text="@sample/menu_item_event.json/data/eventDuration" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>

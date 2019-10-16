@@ -12,6 +12,13 @@
     <string name="launch_text_sub">A smart fall detection app</string>
     <!--endregion-->
 
+    <!--region Snackbar messages-->
+    <string name="start_fall_service">We will detect your falls</string>
+    <string name="start_shake_service">We will detect when you shake</string>
+    <string name="start_fall_and_shake_service">We will detect when you fall or shake</string>
+    <string name="service_stopped">Our service is stopped</string>
+    <!--endregion-->
+
     <!--region Home menu names-->
     <string name="home_menu_detect_only_falls">Only Falls</string>
     <string name="home_menu_detect_only_shakes">Only Shakes</string>

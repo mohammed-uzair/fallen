@@ -21,12 +21,12 @@ class HomeMenuFragment : Fragment() {
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): android.view.View? {
+    ): View? {
         rootView = inflater.inflate(R.layout.layout_main_recyclerview, container, false)
         return rootView
     }
 
-    override fun onViewCreated(view: android.view.View, savedInstanceState: Bundle?) {
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
         //Initialization Method
