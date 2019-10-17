@@ -52,14 +52,30 @@
             android:id="@+id/item_event_duration"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:layout_marginEnd="20dp"
+            android:textColor="@android:color/holo_red_light"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintEnd_toStartOf="@id/item_event_occurred_time"
+            app:layout_constraintHorizontal_bias="0.5"
+            app:layout_constraintStart_toStartOf="@id/item_event_comment"
+            app:layout_constraintTop_toBottomOf="@id/item_event_comment"
+            tools:text="@sample/menu_item_event.json/data/eventDuration" />
+
+        <TextView
+            android:id="@+id/item_event_occurred_time"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
             android:layout_marginEnd="20dp"
             android:gravity="end"
             android:textColor="?colorAccent"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toEndOf="@id/eventImage"
+            app:layout_constraintHorizontal_bias="0.5"
+            app:layout_constraintStart_toEndOf="@id/item_event_duration"
             app:layout_constraintTop_toBottomOf="@id/item_event_comment"
-            tools:text="@sample/menu_item_event.json/data/eventDuration" />
+            tools:text="@sample/menu_item_event.json/data/eventOccurredTime" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 

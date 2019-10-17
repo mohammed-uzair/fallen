@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">Fallen</string>
+    <string name="library_name">Fallen</string>
 
     <!--region Notification category names-->
     <string name="notification_channel_sensor_listener_name">Sensor listener category</string>

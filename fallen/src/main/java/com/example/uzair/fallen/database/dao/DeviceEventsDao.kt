@@ -7,6 +7,10 @@ import androidx.room.OnConflictStrategy
 import androidx.room.Query
 import com.example.uzair.fallen.database.model.DeviceEvent
 
+/**
+ * This is the dao(Data access Object) file, where we write all the abstract logic of data fetching
+ * from the local database
+ */
 @Dao
 interface DeviceEventsDao {
     @Insert(onConflict = OnConflictStrategy.REPLACE)

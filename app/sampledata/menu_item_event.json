@@ -4,49 +4,57 @@
       "eventImage": "@drawable/ic_fall1",
       "eventName": "Fall",
       "eventComment": "Watch for pebbles when you walk",
-      "eventDuration": "0.4"
+      "eventDuration": "0.4",
+      "eventOccurredTime": "17 Oct 19 19:40:13"
     },
     {
       "eventImage": "@drawable/ic_shake1",
       "eventName": "Shake",
       "eventComment": "Milk shake came out well.",
-      "eventDuration": "1.1"
+      "eventDuration": "1.1",
+      "eventOccurredTime": "17 Oct 19 10:03:12"
     },
     {
       "eventImage": "@drawable/ic_fall2",
       "eventName": "Fall",
       "eventComment": "That was a nasty fall.",
-      "eventDuration": "0.9"
+      "eventDuration": "0.9",
+      "eventOccurredTime": "17 Oct 19 19:40:13"
     },
     {
       "eventImage": "@drawable/ic_fall3",
       "eventName": "Fall",
       "eventComment": "Watch your step next time.",
-      "eventDuration": "0.1"
+      "eventDuration": "0.1",
+      "eventOccurredTime": "17 Oct 19 19:40:13"
     },
     {
       "eventImage": "@drawable/ic_shake2",
       "eventName": "Shake",
       "eventComment": "Guess you were testing us.",
-      "eventDuration": "0.3"
+      "eventDuration": "0.3",
+      "eventOccurredTime": "17 Oct 19 19:40:13"
     },
     {
       "eventImage": "@drawable/ic_fall1",
       "eventName": "Fall",
       "eventComment": "Hope you didn't go to hospital.",
-      "eventDuration": "1.2"
+      "eventDuration": "1.2",
+      "eventOccurredTime": "17 Oct 19 19:40:13"
     },
     {
       "eventImage": "@drawable/ic_shake1",
       "eventName": "Shake",
       "eventComment": "Were you really making a milk shake ?",
-      "eventDuration": "0.7"
+      "eventDuration": "0.7",
+      "eventOccurredTime": "17 Oct 19 19:40:13"
     },
     {
       "eventImage": "@drawable/ic_shake2",
       "eventName": "Shake",
       "eventComment": "Shake it well, before use ;)",
-      "eventDuration": "0.6"
+      "eventDuration": "0.6",
+      "eventOccurredTime": "17 Oct 19 19:40:13"
     }
   ]
 }

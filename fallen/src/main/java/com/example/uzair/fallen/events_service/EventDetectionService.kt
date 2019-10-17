@@ -21,34 +21,45 @@ import com.example.uzair.fallen.R
 import com.example.uzair.fallen.database.model.DeviceEvent
 import com.example.uzair.fallen.repository.DeviceEventsRepository
 import com.example.uzair.fallen.repository.IDeviceEventsRepository
+import com.example.uzair.fallen.util.DeviceEventType
 import com.example.uzair.fallen.util.IntentExtras
+import com.example.uzair.fallen.util.getCurrentDateAndTime
 import kotlin.math.pow
 import kotlin.math.sqrt
 
-class FallDetectionService : IntentService("FallDetectionService"), SensorEventListener {
+class EventDetectionService : IntentService(EventDetectionService::class.java.simpleName),
+    SensorEventListener {
     private lateinit var wakeLock: PowerManager.WakeLock
     private lateinit var sensorManager: SensorManager
 
     private lateinit var deviceEventRepository: IDeviceEventsRepository
 
-    private var deviceFallStartTime: Long = 0
-    private var deviceFallEndTime: Long = 0
-    private var previousDeviceFellTime: Long = 0
-    private var deviceLastShakenTime: Long = 0
-    private var finalSensorAcceleration = 0F
-    private var currentSensorAcceleration = SensorManager.GRAVITY_EARTH
-    private var previousSensorAcceleration = SensorManager.GRAVITY_EARTH
+    private var deviceFallStartTime = 0L
+    private var deviceFallEndTime = 0L
+
+    private var deviceShakeStartTime = 0L
+    private var deviceShakeEndTime = 0L
+
+    private var previousDeviceFellTime = 0L
+    private var deviceLastShakenTime = 0L
     private var currentDeviceTime = 0L
-    private var frequentFallTimeOut = 1000 // 1 second
+    private var deviceAccelerationWithoutGravity = 0F
+    private var previousDeviceAccelerationWithGravity = SensorManager.GRAVITY_EARTH
+    private var currentDeviceAccelerationWithGravity = SensorManager.GRAVITY_EARTH
+    private var previousXAxisValue = 0F
+    private var previousYAxisValue = 0F
 
     companion object {
-        private const val TAG = "FallDetectionService"
+        private val TAG = this::class.java.simpleName
         private const val SENSOR_LISTENER_NOTIFICATION_ID = 1
         private const val FALL_DETECTION_NOTIFICATION_ID = 2
         private const val OTHER_DETECTION_NOTIFICATION_ID = 3
 
         private const val ACCELEROMETER_SENSOR_DELAY = 1200
         private const val DEVICE_SHAKE_ACCELERATION_SPEED = 20
+        private const val FALL_THRESHOLD = 2.0
+        private const val FREQUENT_FALL_TIMEOUT = 5000 // 5 second
+        private const val MINIMUM_FALL_TIME = 0.080
     }
 
     override fun setIntentRedelivery(enabled: Boolean) {
@@ -130,30 +141,40 @@ class FallDetectionService : IntentService("FallDetectionService"), SensorEventL
         Log.d(TAG, "onSensorChanged called")
         val sensor = event?.sensor?.type
         if (sensor?.and(Sensor.TYPE_ACCELEROMETER) == 1) {
+            Log.d(TAG, "onSensorChanged accelerometer called")
             val xAxisValue = event.values[0]
             val yAxisValue = event.values[1]
             val zAxisValue = event.values[2]
 
+            Log.d(TAG, "Sensor Computed Value : X = $xAxisValue Y = $yAxisValue Z = $zAxisValue")
+
             val rootSquare = sqrt(xAxisValue.pow(2) + yAxisValue.pow(2) + zAxisValue.pow(2))
-            Log.d(TAG, "Sensor Computed Value : $rootSquare")
+            Log.d(TAG, "Square root = $rootSquare")
 
             //Fall detection
             if (DETECT_FALL) {
-                if (rootSquare < 2.0) {
+                if (rootSquare < FALL_THRESHOLD) {
                     if (deviceFallStartTime == 0L) {
+                        //Begin fall
                         deviceFallStartTime = System.currentTimeMillis()
+                        Log.d(TAG, "Fall started at $deviceFallStartTime")
+
+                        previousXAxisValue = xAxisValue
+                        previousYAxisValue = yAxisValue
                     }
-                } else if (deviceFallStartTime > 0) {
+                }
+                //End fall
+                else if (deviceFallStartTime > 0) {
                     deviceFallEndTime = System.currentTimeMillis()
 
+                    Log.d(TAG, "Fall ended at $deviceFallEndTime")
                     val fallDuration: Double =
                         (deviceFallEndTime - deviceFallStartTime) / 1000.00
 
-                    deviceFallDetected()
+                    Log.d(TAG, "Fall duration is $fallDuration")
 
-                    //Save device event
-                    val deviceEvent = DeviceEvent(0, "Fall", "That was a fall", fallDuration)
-                    saveToDataSource(deviceEvent)
+                    if (fallDuration > MINIMUM_FALL_TIME)
+                        deviceFallDetected(fallDuration)
 
                     previousDeviceFellTime = deviceFallEndTime
                     deviceFallEndTime = 0L
@@ -162,12 +183,12 @@ class FallDetectionService : IntentService("FallDetectionService"), SensorEventL
             }
 
             //Shake detection
+            currentDeviceTime = System.currentTimeMillis()
             if (DETECT_SHAKES) {
-                currentDeviceTime = System.currentTimeMillis()
-                if (isSensorsTimeDifferencesGreaterThanThreshold()) {
-                    previousSensorAcceleration = currentSensorAcceleration
+                if (isSensorsTimeDifferencesGreaterThanShakeThreshold()) {
+                    previousDeviceAccelerationWithGravity = currentDeviceAccelerationWithGravity
 
-                    currentSensorAcceleration =
+                    currentDeviceAccelerationWithGravity =
                         sqrt(
                             (xAxisValue * xAxisValue)
                                     + (yAxisValue * yAxisValue)
@@ -175,18 +196,50 @@ class FallDetectionService : IntentService("FallDetectionService"), SensorEventL
                         )
 
                     val differenceOfAcceleration =
-                        currentSensorAcceleration - previousSensorAcceleration
-                    finalSensorAcceleration =
-                        finalSensorAcceleration * 0.9f + differenceOfAcceleration
+                        currentDeviceAccelerationWithGravity - previousDeviceAccelerationWithGravity
 
-                    if (finalSensorAcceleration > DEVICE_SHAKE_ACCELERATION_SPEED) {
-                        deviceLastShakenTime = currentDeviceTime
+                    deviceAccelerationWithoutGravity =
+                        deviceAccelerationWithoutGravity * 0.9f + differenceOfAcceleration
 
-                        showShakeNotification()
+                    Log.d(TAG, "Device acceleration is $deviceAccelerationWithoutGravity")
 
-                        //Save device event
-                        val deviceEvent = DeviceEvent(0, "Shaken", "You made a good shake", 0.0)
-                        saveToDataSource(deviceEvent)
+                    //Has good amount of acceleration
+                    if (deviceAccelerationWithoutGravity > DEVICE_SHAKE_ACCELERATION_SPEED) {
+                        if (deviceShakeStartTime == 0L) {
+                            //Begin shake
+                            deviceShakeStartTime = System.currentTimeMillis()
+                            Log.d(TAG, "Shake started at $deviceShakeStartTime")
+
+                            previousXAxisValue = xAxisValue
+                            previousYAxisValue = yAxisValue
+                        }
+                    } else if (deviceShakeStartTime > 0) {
+                        deviceShakeEndTime = System.currentTimeMillis()
+
+                        Log.d(TAG, "Shake ended at $deviceShakeEndTime")
+
+                        if (deviceIsShaken(xAxisValue, yAxisValue)) {
+                            deviceLastShakenTime = currentDeviceTime
+
+                            Log.d(TAG, "Shake Detected at $currentDeviceTime")
+
+                            showDeviceShakenNotification()
+
+                            //Save device event
+                            val deviceEvent =
+                                DeviceEvent(
+                                    0,
+                                    DeviceEventType.SHAKE.name,
+                                    getCurrentDateAndTime(),
+                                    0.0
+                                )
+                            saveToDataSource(deviceEvent)
+                        }
+
+                        deviceShakeStartTime = 0L
+                        deviceShakeEndTime = 0L
+                        previousXAxisValue = 0F
+                        previousYAxisValue = 0F
                     }
                 }
             }
@@ -197,16 +250,44 @@ class FallDetectionService : IntentService("FallDetectionService"), SensorEventL
 
     }
 
-    private fun deviceFallDetected() {
+    private fun deviceIsShaken(xAxisValue: Float, yAxisValue: Float): Boolean {
+        val differenceInXAxis = xAxisValue - previousXAxisValue
+        val differenceInYAxis = yAxisValue - previousYAxisValue
+
+        Log.d(
+            TAG,
+            "Sensor shake axis differences Value : X = $differenceInXAxis Y = $differenceInYAxis"
+        )
+
+        return (
+                //Has no huge single axis variation from its previous readings
+                (differenceInXAxis > -20 && differenceInXAxis < 0) &&
+                        (differenceInYAxis > -2 && differenceInYAxis < 2)
+                )
+    }
+
+    private fun deviceFallDetected(fallDuration: Double) {
         if (DETECT_FREQUENT_FALLS && isAFrequentFall()) {
             showFrequentFallNotification()
         } else {
             showFallNotification()
+
+            //Save device event
+            val deviceEvent =
+                DeviceEvent(
+                    0,
+                    DeviceEventType.FALL.name,
+                    getCurrentDateAndTime(),
+                    fallDuration
+                )
+            saveToDataSource(deviceEvent)
         }
     }
 
-    private fun isAFrequentFall() =
-        (System.currentTimeMillis() - previousDeviceFellTime) < frequentFallTimeOut
+    private fun isAFrequentFall(): Boolean {
+        val timeSinceDeviceFellLast = System.currentTimeMillis() - previousDeviceFellTime
+        return ((timeSinceDeviceFellLast > MINIMUM_FALL_TIME) && (timeSinceDeviceFellLast < FREQUENT_FALL_TIMEOUT))
+    }
 
     private fun showFallNotification() {
         //Notify user
@@ -215,14 +296,14 @@ class FallDetectionService : IntentService("FallDetectionService"), SensorEventL
         //Show a notification
         var message = DetectionMessages.getFallDetectionMessage()
         if (message == null) {
-            message = application.getString(R.string.notification_fall_detected_message)
+            message = getString(R.string.notification_fall_detected_message)
         }
         val notification = NotificationCompat.Builder(
             this,
             Fallen.NOTIFICATION_CHANNEL_FALL
         )
-            .setSmallIcon(R.drawable.ic_service)
-            .setContentTitle(application.getString(R.string.notification_fall_name))
+            .setSmallIcon(R.drawable.ic_fall)
+            .setContentTitle(getString(R.string.notification_fall_name))
             .setContentText(message)
             .setPriority(NotificationCompat.PRIORITY_HIGH)
             .setCategory(NotificationCompat.CATEGORY_MESSAGE)
@@ -239,14 +320,14 @@ class FallDetectionService : IntentService("FallDetectionService"), SensorEventL
         //Show a notification
         var message = DetectionMessages.getFrequentFallDetectionMessage()
         if (message == null) {
-            message = application.getString(R.string.notification_frequent_fall_detected_message)
+            message = getString(R.string.notification_frequent_fall_detected_message)
         }
         val notification = NotificationCompat.Builder(
             this,
             Fallen.NOTIFICATION_CHANNEL_OTHER
         )
-            .setSmallIcon(R.drawable.ic_service)
-            .setContentTitle(application.getString(R.string.notification_frequent_fall_name))
+            .setSmallIcon(R.drawable.ic_fall)
+            .setContentTitle(getString(R.string.notification_frequent_fall_name))
             .setContentText(message)
             .setPriority(NotificationCompat.PRIORITY_LOW)
             .setCategory(NotificationCompat.CATEGORY_MESSAGE)
@@ -256,21 +337,21 @@ class FallDetectionService : IntentService("FallDetectionService"), SensorEventL
             .notify(OTHER_DETECTION_NOTIFICATION_ID, notification)
     }
 
-    private fun showShakeNotification() {
+    private fun showDeviceShakenNotification() {
         //Notify user
         Log.d(TAG, "Shake detected")
 
         //Show a notification
         var message = DetectionMessages.getShakeDetectionMessage()
         if (message == null) {
-            message = application.getString(R.string.notification_shake_detected_message)
+            message = getString(R.string.notification_shake_detected_message)
         }
         val notification = NotificationCompat.Builder(
             this,
-            Fallen.NOTIFICATION_CHANNEL_FALL
+            Fallen.NOTIFICATION_CHANNEL_OTHER
         )
-            .setSmallIcon(R.drawable.ic_service)
-            .setContentTitle(application.getString(R.string.notification_shaken_name))
+            .setSmallIcon(R.drawable.ic_shake)
+            .setContentTitle(getString(R.string.notification_shaken_name))
             .setContentText(message)
             .setPriority(NotificationCompat.PRIORITY_LOW)
             .setCategory(NotificationCompat.CATEGORY_MESSAGE)
@@ -280,7 +361,7 @@ class FallDetectionService : IntentService("FallDetectionService"), SensorEventL
             .notify(OTHER_DETECTION_NOTIFICATION_ID, notification)
     }
 
-    private fun isSensorsTimeDifferencesGreaterThanThreshold() =
+    private fun isSensorsTimeDifferencesGreaterThanShakeThreshold() =
         currentDeviceTime - deviceLastShakenTime > ACCELEROMETER_SENSOR_DELAY
 
     /**
@@ -289,5 +370,5 @@ class FallDetectionService : IntentService("FallDetectionService"), SensorEventL
     private fun saveToDataSource(deviceEvent: DeviceEvent) {
         deviceEventRepository.saveDeviceEvent(deviceEvent)
     }
-    //endregion
+//endregion
 }

@@ -20,6 +20,10 @@ import com.example.uzair.iamfalling.view.HomeActivity
 import com.example.uzair.iamfalling.view.HomeMenuFragment
 import com.google.android.material.snackbar.Snackbar
 
+/**
+ * This is adapter class for the home menu screen. This class binds all the views to
+ * the recycler view of the this screen
+ */
 class HomeMenuAdapter : RecyclerView.Adapter<HomeMenuAdapter.MyViewHolder>() {
     companion object {
         private val TAG = this::class.java.simpleName
@@ -64,26 +68,29 @@ class HomeMenuAdapter : RecyclerView.Adapter<HomeMenuAdapter.MyViewHolder>() {
             view.findViewById(R.id.grid_menu_items_for_recycler_view_menu_image)
         private var rootLayout: ConstraintLayout = view.findViewById(R.id.item_menu)
 
-
         val listener = rootLayout.setOnClickListener {
             val homeActivity = activity as HomeActivity
             val menu = namesArrList?.get(adapterPosition)
 
             when (menu?.menuId) {
                 HomeMenuType.ONLY_FALLS.value() -> {
-                    homeActivity.startFallen(detectShakes = false)
+                    homeActivity.startFallen(detectFalls = true)
                     showSnackbar(rootLayout, R.string.start_fall_service)
                 }
                 HomeMenuType.ONLY_SHAKES.value() -> {
-                    homeActivity.startFallen(detectFalls = false)
+                    homeActivity.startFallen(detectShakes = true)
                     showSnackbar(rootLayout, R.string.start_shake_service)
                 }
                 HomeMenuType.FALLS_AND_SHAKES.value() -> {
-                    homeActivity.startFallen()
+                    homeActivity.startFallen(detectFalls = true, detectShakes = true)
                     showSnackbar(rootLayout, R.string.start_fall_and_shake_service)
                 }
                 HomeMenuType.ALL.value() -> {
-                    homeActivity.startFallen()
+                    homeActivity.startFallen(
+                        detectFalls = true,
+                        detectShakes = true,
+                        detectFrequentFalls = true
+                    )
                     showSnackbar(rootLayout, R.string.start_fall_and_shake_service)
                 }
                 HomeMenuType.ALL_EVENTS.value() -> {
@@ -94,9 +101,9 @@ class HomeMenuAdapter : RecyclerView.Adapter<HomeMenuAdapter.MyViewHolder>() {
                             ?.replace(
                                 R.id.root_home_activity,
                                 DeviceEventsFragment(),
-                                "HomeMenuFragment"
+                                HomeMenuFragment.TAG
                             )
-                            ?.addToBackStack("HomeMenuFragment")
+                            ?.addToBackStack(HomeMenuFragment.TAG)
                             ?.commit()
                     }
                 }

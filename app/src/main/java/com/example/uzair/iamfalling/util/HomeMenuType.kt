@@ -1,5 +1,8 @@
 package com.example.uzair.iamfalling.util
 
+/**
+ * Defines the type of event occurred
+ */
 enum class HomeMenuType(private val value: Int) {
     ONLY_FALLS(0),
     ONLY_SHAKES(1),

@@ -8,11 +8,11 @@ import com.example.uzair.fallen.database.model.DeviceEvent
  * Interface for the device events repository
  */
 interface IDeviceEventsRepository {
-    fun getAllDeviceEvents(): LiveData<PagedList<DeviceEvent>>
+    fun saveDeviceEvent(deviceEvent: DeviceEvent)
 
-    fun getAllShakeDeviceEvents(): LiveData<PagedList<DeviceEvent>>
+    fun getAllDeviceEvents(): LiveData<PagedList<DeviceEvent>>
 
     fun getAllFallDeviceEvents(): LiveData<PagedList<DeviceEvent>>
 
-    fun saveDeviceEvent(deviceEvent: DeviceEvent)
+    fun getAllShakeDeviceEvents(): LiveData<PagedList<DeviceEvent>>
 }

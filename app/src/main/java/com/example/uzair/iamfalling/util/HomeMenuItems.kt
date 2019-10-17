@@ -3,6 +3,9 @@ package com.example.uzair.iamfalling.util
 import android.util.SparseArray
 import com.example.uzair.iamfalling.R
 
+/**
+ * A model class that holds all the menu items, in real project keep it static
+ */
 class HomeMenuItems {
     private var homeMenuItems = SparseArray<GridMenuItemsModel>()
 

@@ -14,10 +14,9 @@ import com.example.uzair.iamfalling.viewmodel.DeviceEventsViewModel
 import kotlinx.android.synthetic.main.layout_main_recyclerview.*
 
 /**
- * Shows a list of posts.
+ * Shows a list device events.
  * <p>
- * Posts are stored in a database, so swipes and additions edit the database directly, and the UI
- * is updated automatically using paging components.
+ * The UI is updated automatically using paging components.
  */
 class DeviceEventsFragment : Fragment() {
     private lateinit var rootView: View
@@ -39,7 +38,10 @@ class DeviceEventsFragment : Fragment() {
     }
 
     private fun init() {
-        // Create adapter for the RecyclerView
+        //Set screen title
+        activity?.title = getString(R.string.device_event_screen_title)
+
+        //Create adapter for the RecyclerView
         val adapter = DeviceEventsAdapter()
         layout_main_recyclerview.animation = null
         layout_main_recyclerview.setHasFixedSize(true)
@@ -49,8 +51,9 @@ class DeviceEventsFragment : Fragment() {
         viewModel = ViewModelProviders.of(this).get(DeviceEventsViewModel::class.java)
 
         // Subscribe the adapter to the ViewModel, so the items in the adapter are refreshed
-        // when the list changes
+        // when the list changes, and observe for the changes
         viewModel.allPosts.observe(this, Observer { list ->
+            //Update the UI
             adapter.submitList(list)
         })
     }

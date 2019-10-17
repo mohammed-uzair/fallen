@@ -2,6 +2,9 @@ package com.example.uzair.fallen.events_service
 
 import java.util.concurrent.ThreadLocalRandom
 
+/**
+ * A simple model class to hold the event messages and return a single random message when asked
+ */
 class DetectionMessages {
     companion object {
         var fallDetectionMessages: Array<String>? = null

@@ -8,6 +8,7 @@ import android.view.View
 import android.view.ViewAnimationUtils
 import androidx.constraintlayout.widget.ConstraintLayout
 import com.example.uzair.iamfalling.R
+import kotlin.math.hypot
 
 const val SPLASH_SCREEN_DELAY_MILLISECONDS = 1000
 
@@ -45,7 +46,7 @@ class LaunchActivity : Activity() {
                 val revealX = constraintLayout!!.width / 2
                 val revealY = constraintLayout!!.height / 2
 
-                val finalRadius = Math.hypot(revealX.toDouble(), revealY.toDouble()).toFloat()
+                val finalRadius = hypot(revealX.toDouble(), revealY.toDouble()).toFloat()
 
                 val anim = ViewAnimationUtils.createCircularReveal(
                     constraintLayout,

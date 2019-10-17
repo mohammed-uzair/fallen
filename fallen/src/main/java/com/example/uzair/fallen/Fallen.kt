@@ -7,15 +7,15 @@ import android.content.Intent
 import android.os.Build
 import androidx.core.content.ContextCompat
 import com.example.uzair.fallen.events_service.DetectionMessages
-import com.example.uzair.fallen.events_service.FallDetectionService
+import com.example.uzair.fallen.events_service.EventDetectionService
 import com.example.uzair.fallen.util.IntentExtras
 
 class Fallen(private val application: Application) {
     companion object {
         private val TAG = this::class.java.simpleName
-        public var DETECT_FALL = true
-        public var DETECT_FREQUENT_FALLS = true
-        public var DETECT_SHAKES = true
+        public var DETECT_FALL = false
+        public var DETECT_FREQUENT_FALLS = false
+        public var DETECT_SHAKES = false
 
         //Foreground static notification
         const val NOTIFICATION_CHANNEL_SENSOR_LISTENER = "NOTIFICATION_CHANNEL_SENSOR_LISTENER"
@@ -66,13 +66,13 @@ class Fallen(private val application: Application) {
     }
 
     fun startFallen(
-        detectFalls: Boolean = true,
-        detectShakes: Boolean = true,
-        detectFrequentFalls: Boolean = true,
-        serviceName: String = application.resources.getString(R.string.app_name),
-        serviceDescription: String = application.resources.getString(R.string.serviceDescription)
+        detectFalls: Boolean = false,
+        detectShakes: Boolean = false,
+        detectFrequentFalls: Boolean = false,
+        serviceName: String = application.getString(R.string.library_name),
+        serviceDescription: String = application.getString(R.string.serviceDescription)
     ) {
-        val intent = Intent(application, FallDetectionService::class.java)
+        val intent = Intent(application, EventDetectionService::class.java)
         intent.putExtra(IntentExtras.SERVICE_NAME.name, serviceName)
         intent.putExtra(IntentExtras.SERVICE_DESCRIPTION.name, serviceDescription)
 
@@ -84,7 +84,7 @@ class Fallen(private val application: Application) {
     }
 
     fun stopFallen() {
-        val intent = Intent(application, FallDetectionService::class.java)
+        val intent = Intent(application, EventDetectionService::class.java)
         application.stopService(intent)
     }
 

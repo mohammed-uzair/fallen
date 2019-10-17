@@ -18,6 +18,10 @@ class HomeMenuFragment : Fragment() {
     private lateinit var rootView: View
     private val adapter = HomeMenuAdapter()
 
+    companion object {
+        val TAG = this::class.java.simpleName
+    }
+
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?

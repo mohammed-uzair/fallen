@@ -28,24 +28,12 @@
     <string name="home_menu_stop_service">Stop Detection</string>
     <!--endregion-->
 
-    <!--region All shake event comments-->
-    <string-array name="shake_events_comments_low_duration">
-        <item>We noticed you were shivering.</item>
-        <item>Don\'t be nervous, that meeting will be fine.</item>
-        <item>Its normal to shake a bit.</item>
-    </string-array>
+    <string name="shake_events_comment">That was a really thick shake</string>
 
-    <string-array name="shake_events_comments_medium_duration">
-        <item>Guess you were testing us.</item>
-        <item>Milk shake came out well.</item>
-        <item>Don\'t be hard on us please.</item>
-    </string-array>
-
-    <string-array name="shake_events_comments_high_duration">
-        <item>That was a really thick shake.</item>
-        <item>Is it normal that you shake too much ?</item>
-        <item>Were you really making a milk shake ?</item>
-    </string-array>
+    <!--region All falls event comments-->
+    <string name="fall_events_comments_low_duration">Watch your step next time</string>
+    <string name="fall_events_comments_medium_duration">This was a bad fall</string>
+    <string name="fall_events_comments_high_duration">Hope you did not had any injuries</string>
     <!--endregion-->
 
     <string-array name="fall_detected_messages">

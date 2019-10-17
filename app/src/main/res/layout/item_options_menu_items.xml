@@ -21,7 +21,7 @@
         android:layout_width="0dp"
         android:layout_height="0dp"
         android:layout_gravity="center_horizontal"
-        android:contentDescription="@string/app_name"
+        android:contentDescription="@string/event_image_description"
         app:layout_constraintBottom_toTopOf="@+id/grid_menu_items_for_recycler_view_menu_text"
         app:layout_constraintEnd_toEndOf="parent"
         android:layout_marginBottom="10dp"
