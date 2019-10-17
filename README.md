@@ -38,4 +38,37 @@ At a glance:
 
 ![Example2](documents/raw/pagination.gif)
 
+## How To Use
+
+1. Register the fallen service in your application manifest
+    <service android:name="com.example.uzair.fallen.events_service.EventDetectionService" />
+    
+2. Give the access of the application reference to the fallen library in the Application class
+   public lateinit var fallen: Fallen
+
+    override fun onCreate() {
+        super.onCreate()
+
+        fallen = Fallen(this)
+    }
+    
+3. Start the fallen by 
+        fallen.startFallen(
+            detectFalls = detectFalls,
+            detectShakes = detectShakes,
+            detectFrequentFalls = detectFrequentFalls
+        )
+        
+ Finally when you are over, stop the service
+ fallen.stopFallen()
+ 
+ 4. You can also give some extra features to fallen like below
+        fallen.setFallDetectionMessages(resources.getStringArray(R.array.fall_detected_messages))//String array of messages
+        fallen.setFrequentFallDetectionMessages(resources.getStringArray(R.array.frequent_fall_messages))
+        fallen.setShakeDetectionMessages(resources.getStringArray(R.array.shake_messages))
+    
+All Done :)
+
+You can also provide fallen a list of messages 
+
 I will be happy to add more updates frequently :)
