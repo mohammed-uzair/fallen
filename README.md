@@ -8,6 +8,8 @@ I will support more event gestures in future.
 A sample android app that shows how to use "fallen library" to detect falls and shakes and also frequent falls on an Android device.
 Display a list with all the events.
 
+![Example1](documents/raw/app_demo.gif)
+
 ### Implemented by Clean Architecture
 The following diagram shows the structure of this project with 3 layers:
 - View
