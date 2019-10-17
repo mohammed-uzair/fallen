@@ -66,7 +66,7 @@ The following diagram shows the structure of this project with 3 layers:
         
  Finally when you are over, stop the service
          
-    fallen.stopFallen()
+       fallen.stopFallen()
  
  4. You can also give some extra features to fallen like below
   
