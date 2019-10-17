@@ -40,7 +40,8 @@ The following diagram shows the structure of this project with 3 layers:
 ## How To Use
 
 1. Register the fallen service in your application manifest
-    <service android:name="com.example.uzair.fallen.events_service.EventDetectionService" />
+
+       <service android:name="com.example.uzair.fallen.events_service.EventDetectionService" />
     
 2. Give the access of the application reference to the fallen library in the Application class
     
