@@ -28,7 +28,7 @@ The following diagram shows the structure of this project with 3 layers:
 4. Apps gets all the events from the fallen public API.
 5. Information flows back to the UI where we display the list of events.
 
-At a glance:
+### At a glance:
 
 - Start sensing all fall events.
 - Store the duration of events in the local database.
@@ -44,28 +44,31 @@ At a glance:
     
 2. Give the access of the application reference to the fallen library in the Application class
     
-    class AppHandler : Application() {
-        public lateinit var fallen: Fallen
+       class AppHandler : Application() {
+           public lateinit var fallen: Fallen
 
-        override fun onCreate() {
-            super.onCreate()
+           override fun onCreate() {
+               super.onCreate()
 
-            fallen = Fallen(this)
-        }
-    }
+               fallen = Fallen(this)
+           }
+       }
     
 3. Start fallen by 
-    fallen = (application as AppHandler).fallen
+
+       fallen = (application as AppHandler).fallen
     
-    fallen.startFallen(
+       fallen.startFallen(
         detectFalls = true,
         detectShakes = true,
         detectFrequentFalls = true)
         
  Finally when you are over, stop the service
- fallen.stopFallen()
+         
+    fallen.stopFallen()
  
  4. You can also give some extra features to fallen like below
+  
         fallen.setFallDetectionMessages(resources.getStringArray(R.array.fall_detected_messages))//String array of fall messages
         fallen.setFrequentFallDetectionMessages(resources.getStringArray(R.array.frequent_fall_messages))//String array of frequent fall messages
         fallen.setShakeDetectionMessages(resources.getStringArray(R.array.shake_messages))//String array of shake messages
