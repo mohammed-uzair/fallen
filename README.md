@@ -2,6 +2,8 @@
 A library to detect falls, frequent falls and shakes in Android devices, store data in local database and display notifications. Also a public API
 to get all the events from the database, you can get filter list of events as well.
 
+Fallen also detects frequent falls, meaning any fall that happens again within 5 seconds of the earlier fall. You can also change its values.
+
 I will support more event gestures in future.
 
 # I am falling app
