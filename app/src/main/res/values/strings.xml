@@ -29,6 +29,8 @@
     <!--endregion-->
 
     <string name="shake_events_comment">That was a really thick shake</string>
+    <string name="no_event_found">No Event Found</string>
+    <string name="no_event_found_content_image_description">No Event Found</string>
 
     <!--region All falls event comments-->
     <string name="fall_events_comments_low_duration">Watch your step next time</string>

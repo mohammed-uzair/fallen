@@ -19,7 +19,7 @@ class HomeMenuFragment : Fragment() {
     private val adapter = HomeMenuAdapter()
 
     companion object {
-        val TAG = this::class.java.simpleName
+        val TAG = HomeMenuFragment::class.java.simpleName
     }
 
     override fun onCreateView(

@@ -59,4 +59,5 @@ dependencies {
     androidTestImplementation deps.testing.espressoIntents
     androidTestImplementation deps.testing.jUnitExt
     testImplementation deps.testing.jUnit
+    androidTestImplementation deps.testing.androidMockito
 }

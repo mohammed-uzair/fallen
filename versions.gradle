@@ -20,7 +20,7 @@ ext.buildVersions = buildVersions
 //Create a map for all dependency versions
 def versions = [:]//Empty map
 
-versions.androidGradlePlugin = '3.5.0'
+versions.androidGradlePlugin = '3.5.1'
 
 //region Kotlin versions
 versions.kotlinPlugin = '1.3.50'
@@ -38,11 +38,13 @@ versions.materialDesign = '1.0.0'
 
 versions.recyclerView = '1.0.0'
 
-versions.constraintLayout = '2.0.0-alpha2'
+versions.constraintLayout = '2.0.0-beta1'
 //endregion
 
 //region Other library versions
-versions.room = '2.2.0-rc01'
+versions.room = '2.2.1'
+
+versions.dagger = '2.25.2'
 
 versions.pagination = '2.1.0'
 
@@ -54,11 +56,9 @@ versions.jUnit = '4.12'
 
 versions.jUnitExt = '1.1.1'
 
-versions.mockito = '2.8.9'
+versions.mockito = '3.1.0'
 
 versions.espresso = '3.2.0'
-
-versions.mokito = "2.7.22"
 //endregion
 
 //Create an external variable, and assign all versions to it
@@ -109,6 +109,16 @@ room.androidAnnotationProcessor = "androidx.room:room-compiler:$versions.room"
 room.kotlinCoroutinesSupport = "androidx.room:room-ktx:$versions.room"
 deps.room = room
 
+/*Dagger Dependencies - Use For dependency injection
+        For more ic_information visit
+        url {@link "https://google.github.io/dagger"}*/
+def dagger = [:]
+dagger.core = "com.google.dagger:dagger:$versions.dagger"
+dagger.annotationProcessor = "com.google.dagger:dagger-compiler:$versions.dagger"
+dagger.androidSupport = "com.google.dagger:dagger-android-support:$versions.dagger"
+dagger.androidAnnotationProcessor = "com.google.dagger:dagger-android-processor:$versions.dagger"
+deps.dagger = dagger
+
 /*Testing*/
 def testing = [:]
 /*JUnit 4 framework
@@ -120,8 +130,8 @@ testing.espressoCore = "androidx.test.espresso:espresso-core:$versions.espresso"
 testing.espressoIntents = "androidx.test.espresso:espresso-intents:$versions.espresso"
 testing.jUnitExt = "androidx.test.ext:junit:$versions.jUnitExt"
 testing.room = "androidx.room:room-testing:$versions.room"
-testing.mokito = "org.mockito:mockito-core:$versions.mokito"
-testing.androidMokito = "org.mockito:mockito-android:$versions.mokito"
+testing.mockito = "org.mockito:mockito-core:$versions.mockito"
+testing.androidMockito = "org.mockito:mockito-android:$versions.mockito"
 deps.testing = testing
 
 //Expose an external variable to access all the dependencies

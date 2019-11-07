@@ -14,7 +14,7 @@ import com.example.uzair.fallen.database.model.DeviceEvent
 @Dao
 interface DeviceEventsDao {
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    fun addDeviceEvent(deviceEvent: DeviceEvent)
+    fun addDeviceEvent(deviceEvent: DeviceEvent) : Long
 
     @Query("SELECT * FROM DeviceEvent")
     fun getAllDeviceEvents(): DataSource.Factory<Int, DeviceEvent>

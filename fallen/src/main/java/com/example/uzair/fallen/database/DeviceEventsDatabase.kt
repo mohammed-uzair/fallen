@@ -22,6 +22,7 @@ abstract class DeviceEventsDatabase : RoomDatabase() {
 
     companion object {
         private var instance: DeviceEventsDatabase? = null
+
         @Synchronized
         fun get(context: Context): DeviceEventsDatabase {
             if (instance == null) {

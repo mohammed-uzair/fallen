@@ -66,7 +66,7 @@ class HomeMenuAdapter : RecyclerView.Adapter<HomeMenuAdapter.MyViewHolder>() {
             view.findViewById(R.id.grid_menu_items_for_recycler_view_menu_text)
         internal var menuItemImage: ImageView =
             view.findViewById(R.id.grid_menu_items_for_recycler_view_menu_image)
-        private var rootLayout: ConstraintLayout = view.findViewById(R.id.item_menu)
+        private var rootLayout: ConstraintLayout = view.findViewById(R.id.item_menu_layout)
 
         val listener = rootLayout.setOnClickListener {
             val homeActivity = activity as HomeActivity
@@ -101,9 +101,9 @@ class HomeMenuAdapter : RecyclerView.Adapter<HomeMenuAdapter.MyViewHolder>() {
                             ?.replace(
                                 R.id.root_home_activity,
                                 DeviceEventsFragment(),
-                                HomeMenuFragment.TAG
+                                DeviceEventsFragment.TAG
                             )
-                            ?.addToBackStack(HomeMenuFragment.TAG)
+                            ?.addToBackStack(DeviceEventsFragment.TAG)
                             ?.commit()
                     }
                 }

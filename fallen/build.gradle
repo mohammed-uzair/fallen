@@ -47,6 +47,14 @@ dependencies {
     implementation deps.room.runtime
     kapt deps.room.androidAnnotationProcessor
 
+    /*Dagger Dependencies - Use For dependency injection
+        For more ic_information visit
+        url {@link "https://google.github.io/dagger"}*/
+    implementation deps.dagger.core
+    kapt deps.dagger.annotationProcessor
+    implementation deps.dagger.androidSupport
+    kapt deps.dagger.androidAnnotationProcessor
+
     // optional - Kotlin Extensions and Coroutines support for Room
     implementation deps.room.kotlinCoroutinesSupport
 
@@ -57,6 +65,5 @@ dependencies {
     androidTestImplementation deps.testing.jUnitExt
     testImplementation deps.testing.jUnit
     testImplementation deps.testing.room
-    testImplementation deps.testing.mokito
-    androidTestImplementation deps.testing.androidMokito
+    testImplementation deps.testing.mockito
 }

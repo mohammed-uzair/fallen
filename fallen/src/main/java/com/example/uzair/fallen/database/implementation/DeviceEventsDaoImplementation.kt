@@ -1,9 +1,7 @@
 package com.example.uzair.fallen.database.implementation
 
 import android.content.Context
-import androidx.lifecycle.LiveData
 import androidx.paging.Config
-import androidx.paging.PagedList
 import androidx.paging.toLiveData
 import com.example.uzair.fallen.database.DeviceEventsDatabase
 import com.example.uzair.fallen.database.model.DeviceEvent
@@ -26,18 +24,15 @@ class DeviceEventsDaoImplementation(context: Context) : IDeviceEventsRepository 
         }
     }
 
-    override fun getAllDeviceEvents(): LiveData<PagedList<DeviceEvent>> {
-        return dao.getAllDeviceEvents()
+    override fun getAllDeviceEvents() =
+        dao.getAllDeviceEvents()
             .toLiveData(Config(pageSize = 10, enablePlaceholders = true, maxSize = 100))
-    }
 
-    override fun getAllFallDeviceEvents(): LiveData<PagedList<DeviceEvent>> {
-        return dao.getAllDeviceEventsWithEventType(DeviceEventType.FALL.name)
+    override fun getAllFallDeviceEvents() =
+        dao.getAllDeviceEventsWithEventType(DeviceEventType.FALL.name)
             .toLiveData(Config(pageSize = 10, enablePlaceholders = true, maxSize = 100))
-    }
 
-    override fun getAllShakeDeviceEvents(): LiveData<PagedList<DeviceEvent>> {
-        return dao.getAllDeviceEventsWithEventType(DeviceEventType.SHAKE.name)
+    override fun getAllShakeDeviceEvents() =
+        dao.getAllDeviceEventsWithEventType(DeviceEventType.SHAKE.name)
             .toLiveData(Config(pageSize = 10, enablePlaceholders = true, maxSize = 100))
-    }
 }

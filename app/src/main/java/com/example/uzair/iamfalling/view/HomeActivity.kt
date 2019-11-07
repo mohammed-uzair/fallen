@@ -2,7 +2,6 @@ package com.example.uzair.iamfalling.view
 
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
-import com.example.uzair.fallen.Fallen
 import com.example.uzair.iamfalling.AppHandler
 import com.example.uzair.iamfalling.R
 
@@ -10,7 +9,7 @@ import com.example.uzair.iamfalling.R
  * The base and the single activity for this app, apart the launch activity
  */
 class HomeActivity : AppCompatActivity() {
-    private lateinit var fallen: Fallen
+    private val fallen by lazy { (application as AppHandler).fallen }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -28,8 +27,6 @@ class HomeActivity : AppCompatActivity() {
             .beginTransaction()
             .replace(R.id.root_home_activity, HomeMenuFragment(), "HomeMenuFragment")
             .commit()
-
-        fallen = (application as AppHandler).fallen
     }
 
     /**

@@ -17,7 +17,7 @@ import org.junit.Rule
 import org.junit.Test
 
 @LargeTest
-class HomeFragmentMenuTest {
+class HomeMenuFragmentTest {
 
     @Rule
     @JvmField
@@ -27,7 +27,7 @@ class HomeFragmentMenuTest {
     fun homeFragmentTest() {
         val viewGroup = onView(
             allOf(
-                withId(R.id.item_menu),
+                withId(R.id.item_menu_layout),
                 childAtPosition(
                     allOf(
                         withId(R.id.layout_main_recyclerview),
@@ -49,7 +49,7 @@ class HomeFragmentMenuTest {
                 withContentDescription("Event Image"),
                 childAtPosition(
                     allOf(
-                        withId(R.id.item_menu),
+                        withId(R.id.item_menu_layout),
                         childAtPosition(
                             withId(R.id.layout_main_recyclerview),
                             0
@@ -67,7 +67,7 @@ class HomeFragmentMenuTest {
                 withId(R.id.grid_menu_items_for_recycler_view_menu_text), withText("Only Falls"),
                 childAtPosition(
                     allOf(
-                        withId(R.id.item_menu),
+                        withId(R.id.item_menu_layout),
                         childAtPosition(
                             withId(R.id.layout_main_recyclerview),
                             0
@@ -85,7 +85,7 @@ class HomeFragmentMenuTest {
                 withId(R.id.grid_menu_items_for_recycler_view_menu_text), withText("Only Falls"),
                 childAtPosition(
                     allOf(
-                        withId(R.id.item_menu),
+                        withId(R.id.item_menu_layout),
                         childAtPosition(
                             withId(R.id.layout_main_recyclerview),
                             0
@@ -100,7 +100,7 @@ class HomeFragmentMenuTest {
 
         val constraintLayout = onView(
             allOf(
-                withId(R.id.item_menu),
+                withId(R.id.item_menu_layout),
                 childAtPosition(
                     allOf(
                         withId(R.id.layout_main_recyclerview),
